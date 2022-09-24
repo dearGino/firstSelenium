@@ -142,7 +142,7 @@ public class TestClass {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//driver.quit();
+		driver.quit();
 	}
 	
 	private void waitUtilElementToBeClickable(WebElement element) {
