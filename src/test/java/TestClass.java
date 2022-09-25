@@ -97,7 +97,7 @@ public class TestClass {
 		String _email = "qwertyqwerty";
 		String _checkbox = "true";
 		
-		
+		//Thread.sleep(2000);
 		WebElement fio = driver.findElement(By.xpath("//input[@name='userName']"));
 		fillInputField(fio, _fio);
 		WebElement telephone = driver.findElement(By.xpath("//input[@name='userTel']"));
