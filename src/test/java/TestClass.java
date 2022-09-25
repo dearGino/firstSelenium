@@ -93,27 +93,31 @@ public class TestClass {
 		//6 - Заполнить поля: Имя, Фамилия, Отчество, Регион, Телефон, Эл. почта – qwertyqwerty, галочка Я согласен на обработку
 		String _address ="Московская обл, г Лобня, ул Братьев Улюшкиных, д 1";
 		String _fio = "Петров Петр Петрович";
-		String _telephone = "+79012345678";
+		String _telephone = " (779) 012-3456";
 		String _email = "qwertyqwerty";
-        
-		WebElement fio = driver.findElement(By.xpath("//input[@name='userEmail']"));
+		String _checkbox = "true";
+		
+		
+		WebElement fio = driver.findElement(By.xpath("//input[@name='userName']"));
 		fillInputField(fio, _fio);
 		WebElement telephone = driver.findElement(By.xpath("//input[@name='userTel']"));
-		fillInputField(telephone,_telephone);
+		fillInputField(telephone,_telephone.trim());
 		WebElement email = driver.findElement(By.xpath("//input[@name='userEmail']"));
 		fillInputField(email, _email);
 		WebElement address = driver.findElement(By.xpath("//input[@class='vue-dadata__input']"));
 		fillInputField(address, _address);
-		WebElement checkbox = driver.findElement(By.xpath("//input[@type='checkbox']"));
-		checkbox.click();
+		email.click();
+		WebElement checkboxSpan = driver.findElement(By.xpath("//span[contains(text(),'Я соглашаюсь с условиями')]"));
+		clickOnCheckbox(checkboxSpan);
 		
 		
 		//7 - Проверить, что все поля заполнены введенными значениями
 		checkInputValue(fio, _fio);
-		checkInputValue(telephone,_telephone);
+		checkInputValue(telephone,"+7"+_telephone);
 		checkInputValue(email, _email);
 		checkInputValue(address, _address);
-		Assert.assertTrue("Чекбокс не выбран", checkbox.isSelected());
+		WebElement checkbox = driver.findElement(By.xpath("//input[@type='checkbox']"));
+		checkInputValue(checkbox, _checkbox);
         
 		
 		//8 - Нажать кнопку "Отправить"
@@ -128,8 +132,7 @@ public class TestClass {
 		String errorAlertXPath = "//span[@class='input__error text--small']";
 		WebElement errorAlert = driver.findElement(By.xpath(errorAlertXPath));
 		scrollToElementJs(errorAlert);
-		Assert.assertEquals("Сообщение о некорректности email неправильное или отсутствует",
-				    "Введите корректный адрес электронной почты", errorAlert.getText());
+		checkErrorMessageAtField(errorAlert,"Введите корректный адрес электронной почты");
        
 	}
 
@@ -163,10 +166,15 @@ public class TestClass {
 		element.clear();
 		element.sendKeys(value);
 	}
+	
+	private void clickOnCheckbox(WebElement element) {
+		scrollToElementJs(element);
+		waitUtilElementToBeClickable(element);
+		element.click();
+	}
     
 	private void checkInputValue(WebElement element, String value) {
-		boolean checkFlag = wait.until(ExpectedConditions.attributeContains(element, "value", value));
-		Assert.assertTrue("Поле было заполнено некорректно", checkFlag);
+		Assert.assertEquals("Поле было заполнено некорректно", value, element.getAttribute("value"));
 	}
 	
 	private void checkErrorMessageAtField(WebElement element, String errorMessage) {
