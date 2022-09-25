@@ -62,11 +62,13 @@ public class TestClass {
 		waitUtilElementToBeClickable(insuranceButton);
 		insuranceButton.click();
 		
-		//2 - Проверить наличие заголовка(заголовка вкладки? см.п.5)– Добровольное медицинское страхование
-		//Thread.sleep(3000);
-		//заголовок не успевает обновиться
-		//Assert.assertTrue("Заголовок вкладки отличается", driver.getTitle().contains("Добровольное медицинское страхование"));
-		
+		//2 - Проверить наличие заголовка – Добровольное медицинское страхование
+		String insuranceTitleXpath = "//h1[contains(@class,'title word-breaking title--h2')]";
+		WebElement insuranceTitle = driver.findElement(By.xpath(insuranceTitleXpath));
+		Assert.assertTrue("Страница не загрузилась",
+				  insuranceTitle.isDisplayed() && insuranceTitle.getText().contains("Добровольное медицинское страхование"));
+       
+
 		//закрыть попап с куки
 		String cookiesClose = "//button[@class='btn--text']";
 		WebElement cookiesBtnClose = driver.findElement(By.xpath(cookiesClose));
@@ -81,14 +83,14 @@ public class TestClass {
 		applicationButton.click();
 		
 		
-		//5 - задание: "Проверку делать по тексту //h1=Добровольное медицинское страхование "
-		String insuranceTitleXpath = "//h1[contains(@class,'title word-breaking title--h2')]";
-		WebElement insuranceTitle = driver.findElement(By.xpath(insuranceTitleXpath));
-		Assert.assertTrue("Страница не загрузилась",
-				  insuranceTitle.isDisplayed() && insuranceTitle.getText().contains("Добровольное медицинское страхование"));
+		//5 - Страница просрколилась до текста "Оперативно перезвоним для оформления полиса"
+		String titleWillCallXpath = "//h2[contains(text(),'Оперативно перезвоним')]";
+		WebElement titleWillCall = driver.findElement(By.xpath(titleWillCallXpath));
+		Assert.assertTrue("Страница не прокрутилась",
+				titleWillCall.isDisplayed() && titleWillCall.getText().contains("Оперативно перезвоним"));
        
 		
-		//5 - Заполнить поля: Имя, Фамилия, Отчество, Регион, Телефон, Эл. почта – qwertyqwerty, галочка Я согласен на обработку
+		//6 - Заполнить поля: Имя, Фамилия, Отчество, Регион, Телефон, Эл. почта – qwertyqwerty, галочка Я согласен на обработку
 		String _address ="Московская обл, г Лобня, ул Братьев Улюшкиных, д 1";
 		String _fio = "Петров Петр Петрович";
 		String _telephone = "+79012345678";
@@ -106,7 +108,7 @@ public class TestClass {
 		checkbox.click();
 		
 		
-		//6 - Проверить, что все поля заполнены введенными значениями
+		//7 - Проверить, что все поля заполнены введенными значениями
 		checkInputValue(fio, _fio);
 		checkInputValue(telephone,_telephone);
 		checkInputValue(email, _email);
@@ -114,7 +116,7 @@ public class TestClass {
 		Assert.assertTrue("Чекбокс не выбран", checkbox.isSelected());
         
 		
-		//7 - Нажать кнопку "Отправить"
+		//8 - Нажать кнопку "Отправить"
 		String sendButtonXpath ="//button[@type='submit']";
 		WebElement sendButton = driver.findElement(By.xpath(sendButtonXpath));
 		scrollToElementJs(sendButton);
@@ -122,7 +124,7 @@ public class TestClass {
 		sendButton.click();
         
 		
-		//8 -Проверка, что есть ошибка под полем с неправильным email
+		//9 -Проверка, что есть ошибка под полем с неправильным email
 		String errorAlertXPath = "//span[@class='input__error text--small']";
 		WebElement errorAlert = driver.findElement(By.xpath(errorAlertXPath));
 		scrollToElementJs(errorAlert);
