@@ -1,11 +1,11 @@
-package test.java;
+package src.test.java;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ TestClass.class })
+@SuiteClasses({ ClassTest.class })
 public class MyTestSuite {
 
 }
