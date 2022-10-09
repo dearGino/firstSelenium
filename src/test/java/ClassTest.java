@@ -2,7 +2,6 @@ package src.test.java;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Scanner;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,8 +11,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.junit.runner.RunWith;
@@ -25,7 +22,6 @@ public class ClassTest {
 
 	WebDriver driver;
 	WebDriverWait wait;
-	Scanner input = new Scanner(System.in);
 	String fioInput;
 	String telephoneInput;
 	String emailInput;
@@ -47,36 +43,15 @@ public class ClassTest {
 	            { "Сергеев Сергей Сергеевич"," (779) 012-3456", "qwertyqwerty", "Московская обл, г Лобня, ул Братьев Улюшкиных, д 1" } });
 	    }
 	
-	
+	@Parameters
+	public void selectBrowser(String browser) {
+		
+	}
+	    
 	@Before
 	public void before() {
-		
-
-		System.out.println("Выберите один из браузеров:\nIE,\nFirefox,\nChrome");
-		driver = null;
-        try {
-			String chosenBrowser = input.nextLine();
-			    switch (chosenBrowser) {
-				case "IE":
-					System.setProperty("webdriver.ie.driver", "src/test/resources/iedriver/IEDriverServer.exe");
-					driver = new InternetExplorerDriver();
-					break;
-				case "Firefox":
-					System.setProperty("webdriver.gecko.driver", "src/test/resources/firefoxdriver/geckodriver.exe");
-					driver = new FirefoxDriver();
-					break;
-				case "Chrome":
-					System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver/chromedriver.exe");
-					driver = new ChromeDriver();
-					break;
-				default:
-					System.out.println("Неверное введены данные для выбора браузера");
-					break;
-			}
-		} catch (Exception e) {
-            System.out.println("Во время ввода произошла непредвиденная ошибка" + e);
-		}
-        input.close();
+		System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver/chromedriver.exe");
+		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		wait = new WebDriverWait(driver, Duration.ofMillis(4000));
 		
