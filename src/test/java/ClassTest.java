@@ -1,5 +1,7 @@
 package src.test.java;
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Scanner;
 import org.junit.After;
 import org.junit.Assert;
@@ -14,18 +16,42 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
-
+@RunWith(Parameterized.class)
 public class ClassTest {
 
 	WebDriver driver;
 	WebDriverWait wait;
+	Scanner input = new Scanner(System.in);
+	String fioInput;
+	String telephoneInput;
+	String emailInput;
+	String addressInput;
 	
-
+	
+	public ClassTest(String fioInput, String telephoneInput, String emailInput, String addressInput) {
+		this.fioInput = fioInput;
+		this.telephoneInput = telephoneInput;
+		this.emailInput = telephoneInput;
+		this.addressInput = telephoneInput;
+	}
+	
+	 @Parameters
+	    public static Collection<Object[]> data() {
+	        return Arrays.asList(new Object[][] {
+	        	{"Петров Петр Петрович", " (779) 012-3456", "qwertyqwerty", "Московская обл, г Лобня, ул Братьев Улюшкиных, д 1" },
+	            { "Иванов Иван Иванович"," (779) 012-3456", "qwertyqwerty", "Московская обл, г Лобня, ул Братьев Улюшкиных, д 1" },
+	            { "Сергеев Сергей Сергеевич"," (779) 012-3456", "qwertyqwerty", "Московская обл, г Лобня, ул Братьев Улюшкиных, д 1" } });
+	    }
+	
+	
 	@Before
-public void before() {
+	public void before() {
 		
-		Scanner input = new Scanner(System.in);
+
 		System.out.println("Выберите один из браузеров:\nIE,\nFirefox,\nChrome");
 		driver = null;
         try {
@@ -140,12 +166,6 @@ public void before() {
        
 		
 		//6 - Заполнить поля: Имя, Фамилия, Отчество, Регион, Телефон, Эл. почта – qwertyqwerty, галочка Я согласен на обработку
-		String addressInput ="Московская обл, г Лобня, ул Братьев Улюшкиных, д 1";
-		String fioInput = "Петров Петр Петрович";
-		String telephoneInput = " (779) 012-3456";
-		String emailInput = "qwertyqwerty";
-		String checkboxInput = "true";
-		
 		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(2000));
 		WebElement fio = driver.findElement(By.xpath("//input[@name='userName']"));
 		fillInputField(fio, fioInput);
@@ -160,9 +180,11 @@ public void before() {
 		fillInputField(address, addressInput);
 		Assert.assertEquals(addressInput, address.getAttribute("value"));
 		email.click();
+		String checkboxInput = "true";
 		WebElement checkboxSpan = driver.findElement(By.xpath("//span[contains(text(),'Я соглашаюсь с условиями')]"));
 		clickOnCheckbox(checkboxSpan);
-		Assert.assertEquals(checkboxInput, address.getAttribute("value"));
+		WebElement checkbox = driver.findElement(By.xpath("//input[@type='checkbox']"));
+		Assert.assertEquals(checkboxInput, checkbox.getAttribute("value"));
 		
 		
 		
@@ -171,7 +193,6 @@ public void before() {
 		checkInputValue(telephone,"+7"+telephoneInput);
 		checkInputValue(email, emailInput);
 		checkInputValue(address, addressInput);
-		WebElement checkbox = driver.findElement(By.xpath("//input[@type='checkbox']"));
 		checkInputValue(checkbox, checkboxInput);
         
 		
@@ -197,11 +218,11 @@ public void before() {
 	
 	@After
 	public void after() {
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {		
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {		
+//			e.printStackTrace();
+//		}
 		driver.quit();
 	}
 	
